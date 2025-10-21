@@ -1,8 +1,7 @@
-import thinging from "@/assets/thinging.gif";
+import thinging from '@/assets/thinging.gif';
 
-export default function LoadingComponent({remSize = 8,}): JSX.Element {
+export default function LoadingComponent({ remSize = 8 }): JSX.Element {
   return (
-
     <div role="status" className="flex flex-col items-center justify-center">
       <img
         src={thinging}

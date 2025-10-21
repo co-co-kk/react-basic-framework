@@ -1,0 +1,43 @@
+.force-bg-color,
+.ant-form-item-has-error .force-bg-color{
+  border-radius: 4px;
+  border-color: #DCDFE6;
+  font-size: 14px;
+  padding: 0 12px;
+  height: 32px;
+  color: #303133;
+  font-weight: 600;
+}
+.force-bg-color:hover,
+.force-bg-color:focus,
+.ant-form-item-has-error .force-bg-color:hover{
+  border-color: #c0c4cc;
+}
+.force-bg-color:hover,
+.force-bg-color:focus,
+.ant-form-item-has-error .force-bg-color:focus{
+  border-color: #409eff;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+input:-webkit-autofill, 
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus{
+    -webkit-text-fill-color: inherit;
+    box-shadow: 0 0 0px 1000px #F6F7F8 inset;
+    color: inherit;
+}
+
+.custom-checkbox .ant-checkbox-inner {
+  border-color: #419eff; /* 框体边框颜色 */
+  background-color: #f0f0f0; /* 框体背景色 */
+}
+
+.custom-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--checked-color, #419eff); /* 选中时的背景色 */
+  border-color: var(--checked-color, #419eff); /* 选中时的边框色 */
+}
+
+.custom-checkbox .ant-checkbox-wrapper:hover .ant-checkbox-inner {
+  border-color: var(--checked-color, #419eff); /* 悬停时的边框色 */
+}
