@@ -87,8 +87,8 @@ export const useMenuStore = create<MenuStore>((set) => ({
   getRecentlUsed: async () => {
     try {
       const res = await getRecentlyUsed();
-      if (res.data.code === 200) {
-        const data = res.data.data.map(item => ({
+      if (res.code === 200) {
+        const data = res.data.map(item => ({
           path: item.routePath,
           name: item.menuName,
           icon: item.icon,
@@ -98,7 +98,7 @@ export const useMenuStore = create<MenuStore>((set) => ({
         set({ recentlUsedData: data });
       } else {
         console.error('查询最近使用菜单失败:');
-        console.error(res.data.message);
+        console.error(res.message);
       }
     } catch (error) {
       console.error('查询最近使用菜单失败:');

@@ -4,16 +4,35 @@
   "private": true,
   "scripts": {
     "dev": "vite --host",
+    "dev-sjj": "vite --mode dev-sjj",
+    "devpro": "vite --mode devpro",
+    "build:devpro": "vite build --mode devpro",
+    "build:production": "vite build --mode production",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@icon-park/react": "^1.4.2",
+    "@remixicon/react": "^4.7.0",
     "antd": "^5.27.5",
+    "autofit.js": "^3.2.8",
+    "axios": "^1.12.2",
+    "clsx": "^2.1.1",
+    "fuse.js": "^7.1.0",
+    "js-md5": "^0.8.3",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "path": "^0.12.7",
     "react": "^18.2.0",
+    "react-cookie": "^8.0.1",
     "react-dom": "^18.2.0",
     "react-player": "^3.3.3",
-    "react-router-dom": "^7.9.1"
+    "react-router-dom": "^7.9.1",
+    "swiper": "^11.2.8",
+    "tailwind-merge": "^3.3.1",
+    "wujie-polyfill": "^1.1.3",
+    "wujie-react": "^1.0.29",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.0.0",

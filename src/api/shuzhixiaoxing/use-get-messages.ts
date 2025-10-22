@@ -51,5 +51,12 @@ export const assistantList = async (name) => {
 export const foldersList = async (id, search) => {
   return await api.get<any>(
     `/api/xingflow/v1/projects/${id}?id=${id}&page=1&size=100&is_component=false&is_flow=true&search=${search}`
+
+  );
+};
+//根据流程分类查询
+export const foldersProjects = async () => {
+  return await api.get<any>(
+    `/api/xingflow/v1/projects/`
   );
 };

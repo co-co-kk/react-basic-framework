@@ -11,6 +11,7 @@ import zhCN from "antd/locale/zh_CN";
 import LoadingPage from "@/pages/LoadingPage/index";
 import { RouterProvider, useLocation } from "react-router-dom";
 export default function App() {
+
   return (
 
      <ConfigProvider

@@ -34,11 +34,11 @@ import loginBg3 from '@/assets/login/bg3.jpg';
 import loginBg4 from '@/assets/login/bg4.jpg';
 import loginLogo from '@/assets/login/loginLogo.png';
 import { useCustomNavigate } from "@/hooks/use-custom-navigate";
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 
 import { getBackendManagement_URL, comDownloadUrl } from "@/utils/urlConfig/config-constants";
-import { useMenuStore } from '@/store/menuStore';
-import { usePermissionStore } from '@/store/permissionStore';
+import { useMenuStore } from '@/stores/menuStore';
+import { usePermissionStore } from '@/stores/permissionStore';
 
 const setCookie = (cookieName, cookieValue, longTime) => {
   document.cookie = `${cookieName}=${cookieValue};path=/;expires=${new Date(Date.now() + longTime).toUTCString()}`;
@@ -197,9 +197,8 @@ const Login = () => {
       });
       await fetchMenuData();
       await queryAdmin();
-
-      if (userInfoRes.data.code !== 200) {
-        message.error(userInfoRes.data.message);
+      if (userInfoRes.code !== 200) {
+        message.error(userInfoRes.message);
         return;
       }
       const { licenseStatus, userType } = userInfo;
@@ -234,8 +233,8 @@ const Login = () => {
     // 获取权限数据并更新Store
     await getPermissions('tianshu_ai_frontend')
       .then((res) => {
-        if (res?.data?.code === 200) {
-          const permissions = res.data.data;
+        if (res?.code === 200) {
+          const permissions = res.data;
           const storedPermissions = usePermissionStore.getState().buttonPermission;
           if (JSON.stringify(permissions) !== JSON.stringify(storedPermissions)) {
             localStorage.setItem('buttonPermission', JSON.stringify(permissions));
