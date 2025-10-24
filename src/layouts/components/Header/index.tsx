@@ -23,6 +23,7 @@ import {
   LayoutFour,
   Log,
 } from '@icon-park/react';
+import PasswordChangeDialog from "../ChangePassword";
 import {
   RiSearch2Line,
   RiTranslate,
@@ -114,6 +115,9 @@ export default function AppHeader(): JSX.Element {
     setPasswordDialogVisible(true);
   }
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+
+  // 添加搜索关键词状态
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const items: MenuProps["items"] = [
     {
@@ -332,6 +336,7 @@ export default function AppHeader(): JSX.Element {
   const handleMoreMouseLeave = () => {
     moreTimer = setTimeout(() => {
       setShowMore(false);
+      setSearchKeyword(''); // 清空搜索关键词
     }, 100); // 延迟关闭，避免抖动
   };
   // 鼠标移入弹窗内容
@@ -343,6 +348,7 @@ export default function AppHeader(): JSX.Element {
   const handleMoreContentMouseLeave = () => {
     moreTimer = setTimeout(() => {
       setShowMore(false);
+      setSearchKeyword(''); // 清空搜索关键词
     }, 100); // 延迟关闭，避免抖动
   };
 
@@ -362,12 +368,20 @@ export default function AppHeader(): JSX.Element {
       }
       // 判断是否为 xiaoxing 相关 iframe 页面
       setShowMore(false);
+      setSearchKeyword(''); // 清空搜索关键词
     }, []
   );
 
   const handleMoreClick = (e) => {
     e.stopPropagation();
-    setShowMore((prev) => !prev);
+    setShowMore((prev) => {
+      const newValue = !prev;
+      // 当关闭弹窗时清空搜索关键词
+      if (!newValue) {
+        setSearchKeyword('');
+      }
+      return newValue;
+    });
   };
 
   const handleExtraTagClick = (item) => {
@@ -387,6 +401,12 @@ export default function AppHeader(): JSX.Element {
   const blurSearch = () => {
     // setSearchInputWidth(0)
   }
+
+  // 处理搜索输入变化
+  const handleSearchChange = (e) => {
+    setSearchKeyword(e.target.value);
+  }
+
   //获取未读消息
   const getMessageNoReadCount = async () => {
     // const { data: res } = await getCurrUserMessageNoReadCount()
@@ -433,7 +453,18 @@ export default function AppHeader(): JSX.Element {
 
   // 计算是否需要显示"更多应用"按钮
   const shouldShowMoreTag = [...defaultTags, ...extraTagsData].length > 4;
-  // console.log(recentlUsedData, 'recentlUsedDatarecentlUsedData');
+
+  // 根据搜索关键词过滤最近使用和全部应用的数据
+  const filteredRecentlUsedData = recentlUsedData.filter(item =>
+    item.name.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
+
+  const filteredMenuData = menuData.filter(item =>
+    item.name.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
+
+  // 检查是否有搜索结果
+  const hasSearchResults = filteredRecentlUsedData.length > 0 || filteredMenuData.length > 0;
 
   return (
     <div
@@ -533,86 +564,115 @@ export default function AppHeader(): JSX.Element {
             // flexWrap: 'wrap',
             gap: 16,
           }}
+          className='overflow-y-hidden flex flex-col'
           onMouseEnter={handleMoreContentMouseEnter}
           onMouseLeave={handleMoreContentMouseLeave}
           onClick={(e) => e.stopPropagation()}
         >
           <div className='w-60 mb-2.5'>
-            <Input width="240px" onBlur={() => blurSearch()} placeholder="请输入搜索内容" />
+            <Input
+              width="240px"
+              onBlur={() => blurSearch()}
+              placeholder="请输入搜索内容"
+              value={searchKeyword}
+              onChange={handleSearchChange}
+              autoFocus
+            />
           </div>
-          <div className='mb-2.5 text-[#092C4D] text-sm font-medium'>
-            最近使用
-          </div>
-          <div className='flex flex-wrap gap-12 gap-y-2 max-h-[160px]'>
-            {recentlUsedData.map((item) => (
-              <div
-                key={item.name}
-                className="flex items-center h-[50px] group hover:bg-[#DDE6FAFF] rounded-[6px] pl-1.5"
-                style={{ width: 120, cursor: 'pointer' }}
-                onClick={() => handleExtraTagClick(item)}
-              >
-                <div
-                  className="w-[42px] h-[42px] flex items-center justify-center rounded-[10px] text-[#002FA7] text-[14px] text-center border-[1px] border-solid border-[#DFE2E7] group-hover:bg-[#fff] group-hover:border-[#fff]"
-                  style={{
-                    lineHeight: '20px',
-                  }}
-                >
-                  {IconComponent(true, item.icon)}
-                </div>
-                <div
-                  className="ml-2.5 text-[#5A6875] text-[12px] leading-[20px] flex items-center"
-                  style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'normal',
-                  }}
-                  title={item.name}
-                >
-                  {item.name}
-                </div>
+          <div className='overflow-y-auto min-h-0 flex-1'>
+          {/* 当有搜索关键词且没有搜索结果时显示 */}
+          {searchKeyword && !hasSearchResults && (
+            <div className='text-center py-5 text-gray-500'>
+              未找到匹配的应用
+            </div>
+          )}
+
+          {/* 只有在没有搜索关键词或有搜索结果时才显示内容 */}
+          {(!searchKeyword || hasSearchResults) && (
+            <>
+              {/* 只在没有搜索关键词时显示最近使用 */}
+              {!searchKeyword && (
+                <>
+                  <div className='mb-2.5 text-[#092C4D] text-sm font-medium'>
+                    最近使用
+                  </div>
+                  <div className='flex flex-wrap gap-12 gap-y-2'>
+                    {filteredRecentlUsedData.map((item) => (
+                      <div
+                        key={item.name}
+                        className="flex items-center h-[50px] group hover:bg-[#DDE6FAFF] rounded-[6px] pl-1.5"
+                        style={{ width: 120, cursor: 'pointer' }}
+                        onClick={() => handleExtraTagClick(item)}
+                      >
+                        <div
+                          className="w-[42px] h-[42px] flex items-center justify-center rounded-[10px] text-[#002FA7] text-[14px] text-center border-[1px] border-solid border-[#DFE2E7] group-hover:bg-[#fff] group-hover:border-[#fff]"
+                          style={{
+                            lineHeight: '20px',
+                          }}
+                        >
+                          {IconComponent(true, item.icon)}
+                        </div>
+                        <div
+                          className="ml-2.5 text-[#5A6875] text-[12px] leading-[20px] flex items-center"
+                          style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'normal',
+                          }}
+                          title={item.name}
+                        >
+                          {item.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <Divider></Divider>
+                </>
+              )}
+
+              <div className='mb-2.5 text-[#092C4D] text-sm font-medium'>
+                {searchKeyword ? '搜索结果' : '全部应用'}
               </div>
-            ))}
-          </div>
-          <Divider></Divider>
-          <div className='mb-2.5 text-[#092C4D] text-sm font-medium'>
-            全部应用
-          </div>
-          <div className='flex flex-wrap gap-x-12 gap-y-1.5 max-h-[160px]'>
-            {menuData.map((item) => (
-              <div
-                key={item.name}
-                className="flex items-center h-[50px] group hover:bg-[#DDE6FAFF] rounded-[6px] pl-1.5"
-                style={{ width: 119, cursor: 'pointer' }}
-                onClick={() => handleExtraTagClick(item)}
-              >
-                <div
-                  className="w-[42px] h-[42px] flex items-center justify-center rounded-[10px] text-[#002FA7] text-[14px] text-center border-[1px] border-solid border-[#DFE2E7] group-hover:bg-[#fff] group-hover:border-[#fff]"
-                  style={{
-                    lineHeight: '20px',
-                  }}
-                >
-                  {IconComponent(true, item.icon)}
-                </div>
-                <div
-                  className="ml-2.5 text-[#5A6875] text-[12px] leading-[20px] flex items-center"
-                  style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'normal',
-                  }}
-                  title={item.name}
-                >
-                  {item.name}
-                </div>
+              <div className='flex flex-wrap gap-x-12 gap-y-1.5'>
+                {filteredMenuData.map((item) => (
+                  <div
+                    key={item.name}
+                    className="flex items-center h-[50px] group hover:bg-[#DDE6FAFF] rounded-[6px] pl-1.5"
+                    style={{ width: 119, cursor: 'pointer' }}
+                    onClick={() => handleExtraTagClick(item)}
+                  >
+                    <div
+                      className="w-[42px] h-[42px] flex items-center justify-center rounded-[10px] text-[#002FA7] text-[14px] text-center border-[1px] border-solid border-[#DFE2E7] group-hover:bg-[#fff] group-hover:border-[#fff]"
+                      style={{
+                        lineHeight: '20px',
+                      }}
+                    >
+                      {IconComponent(true, item.icon)}
+                    </div>
+                    <div
+                      className="ml-2.5 text-[#5A6875] text-[12px] leading-[20px] flex items-center"
+                      style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'normal',
+                      }}
+                      title={item.name}
+                    >
+                      {item.name}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </>
+          )}
           </div>
+
         </div>
       )}
       {/* Middle Section */}
@@ -668,10 +728,12 @@ export default function AppHeader(): JSX.Element {
         </div>
       </div>
 
-      {/* <PasswordChangeDialog
+
+       {/* 密码修改弹窗 */}
+      <PasswordChangeDialog
         visible={passwordDialogVisible}
         onClose={() => setPasswordDialogVisible(false)}
-      /> */}
+      />
     </div>
   );
 }

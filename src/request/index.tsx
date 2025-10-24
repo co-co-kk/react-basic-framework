@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
 axios.defaults.withCredentials = true;
 import { message, Space } from 'antd';
 import useAuthStore from "@/stores/authStore";
@@ -27,7 +26,7 @@ customAxios.interceptors.request.use(
   (config: RequestConfig) => {
     const tstoken = localStorage.getItem('access_token_lf');
     config.headers['Authorization'] = `${tstoken}`;
-    if (noTokenRequestList.includes(config.url!)) {
+    if (noTokenRequestList.some(path => config.url?.includes(path))) {
       config.headers['Authorization'] = '';
     }
     config.headers['Access-Control-Allow-Origin'] = '*';
@@ -39,6 +38,7 @@ customAxios.interceptors.request.use(
 );
 customAxios.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
+    debugger
     if (response.data.status_code === 200 || response.data.code === 200) {
       return response.data;
     }
@@ -63,6 +63,7 @@ customAxios.interceptors.response.use(
     }
   },
   (error: AxiosError) => {
+    debugger
     if (error.response?.status === 401) {
       if (error?.status === 401 && error && !error.config.headers._retry) {
         error.config.headers._retry = true; // 避免无限递归

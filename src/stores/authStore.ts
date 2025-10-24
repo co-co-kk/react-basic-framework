@@ -1,6 +1,6 @@
 // authStore.js
 // import { LANGFLOW_ACCESS_TOKEN } from "@/constants/constants";
-// import { LOGIN_URL } from "@/customization/config-constants";
+import { LOGIN_URL } from "@/utils/urlConfig/config-constants.ts";
 import { Cookies } from 'react-cookie';
 
 import { create } from 'zustand';
@@ -49,7 +49,7 @@ const useAuthStore = create<any>((set, get) => ({
       autoLogin: false,
       apiKey: null,
     });
-    // window.location.href = LOGIN_URL;
+    window.location.href = LOGIN_URL;
     // 防止死循环
     // const navigate = useCustomNavigate();
     // navigate("/login");

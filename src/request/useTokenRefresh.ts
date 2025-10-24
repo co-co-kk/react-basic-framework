@@ -1,5 +1,6 @@
 
 import request from "@/request";
+import useAuthStore from "@/stores/authStore";
 
 interface RefreshTokenResponse {
   accessToken: string;
@@ -23,25 +24,24 @@ async function refreshToken(): Promise<string> {
 }
 
 export async function refreshAndRetry(originalRequest: any) {
+    debugger
   if (!isRefreshing) {
     isRefreshing = true;
-    // if(!getCookie("refresh_token_lf")) {
-    //   logout()
-    // }
-    // const logout = useAuthStore((state) => state.logout);
-
     refreshPromise = refreshToken()
       .then((token) => {
+        debugger
         requestQueue.forEach((cb) => cb(token));
         requestQueue = [];
         return token;
       })
       .catch((error) => {
+        debugger
         requestQueue = [];
         // logout()
         throw error;
       })
       .finally(() => {
+        debugger
         isRefreshing = false;
         refreshPromise = null;
       });
@@ -53,11 +53,7 @@ export async function refreshAndRetry(originalRequest: any) {
         ...originalRequest.headers,
         Authorization: token,
       };
-      // 这里用 api/service 重新发请求
       request(originalRequest).then(resolve).catch(reject);
-      // import('./axios').then(({ request }) => {
-      //   request(originalRequest.url,originalRequest).then(resolve).catch(reject)
-      // })
     });
   });
 }
