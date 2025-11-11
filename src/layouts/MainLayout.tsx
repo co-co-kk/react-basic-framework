@@ -9,6 +9,7 @@ export default function MainLayout() {
         <nav className="flex flex-1 justify-center items-center space-x-4">
           <Link to="/" className="hover:text-blue-400">Home</Link>
           <Link to="/about" className="hover:text-blue-400">About</Link>
+          <Link to="/aiChat" className="hover:text-blue-400">AiChat</Link>
         </nav>
       </aside>
       {/* Main content */}

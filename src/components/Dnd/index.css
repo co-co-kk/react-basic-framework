@@ -1,0 +1,179 @@
+/* 基础样式 */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 水平布局容器 */
+.flex-container {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 4px;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+/* 水平布局中的项 */
+.flex-item {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* 水平布局中的项特殊样式 */
+.flex-item .group > div:first-child {
+  width: 100%;
+}
+
+/* 拖拽项容器样式 */
+.group {
+  position: relative;
+  z-index: 1;
+}
+
+/* 卡片样式 */
+.group > div:first-child {
+  cursor: default;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 卡片悬停效果 */
+.group:hover > div:first-child {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+/* 拖拽时的视觉提示 */
+.group.dragging {
+  opacity: 0.7;
+}
+
+/* 拖拽手柄样式 */
+.group .bg-blue-700 {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  z-index: 20;
+}
+
+.group .bg-blue-700:hover {
+  cursor: move;
+  cursor: grab;
+  transform: scale(1.1);
+}
+
+.group .bg-blue-700:active {
+  cursor: grabbing;
+}
+
+/* 拖拽覆盖层样式优化 */
+.dnd-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 0.5rem;
+  opacity: 0.95;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  border: 2px solid rgba(37, 99, 235, 0.5);
+  z-index: 1000;
+}
+
+/* 防止拖拽过程中选择文本 */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 项之间的间距 */
+.space-y-4 > div {
+  margin-bottom: 1rem;
+}
+
+/* 放置提示 */
+.drag-over {
+  background-color: rgba(37, 99, 235, 0.1);
+  border: 2px dashed rgba(37, 99, 235, 0.5);
+  border-radius: 8px;
+}
+
+/* 占位符样式 */
+.drop-placeholder {
+  height: 80px;
+  border: 2px dashed #3b82f6;
+  border-radius: 8px;
+  background-color: rgba(59, 130, 246, 0.1);
+  transition: all 0.2s ease;
+}
+
+.panel-resize-handle {
+  width: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin: 0 2px;
+  transition: background-color 0.2s;
+}
+
+.panel-resize-handle:hover {
+  background-color: rgba(37, 99, 235, 0.3);
+}
+
+.panel-resize-handle:active {
+  background-color: rgba(37, 99, 235, 0.5);
+}
+
+/* 悬停效果增强 */
+.p-6 {
+  transition: all 0.2s ease-in-out;
+}
+
+/* 移动端响应式调整 */
+@media (max-width: 640px) {
+  .flex-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .flex-item {
+    flex: none;
+    width: 100%;
+  }
+  
+  .p-6 {
+    padding: 1rem;
+  }
+  
+  /* 在移动端保持一致的外观 */
+  .flex-item .group > div:first-child {
+    width: 100%;
+  }
+}
+
+/* 动画效果 */
+@keyframes dragStart {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.group.drag-start {
+  animation: dragStart 0.3s ease;
+}

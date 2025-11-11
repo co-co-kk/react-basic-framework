@@ -1,0 +1,387 @@
+/* 增强版拖拽组件样式 */
+
+.enhanced-dnd-container {
+  padding: 20px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.rows-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.row-wrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.row-wrapper:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.row-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.layout-toggle {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.layout-toggle:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* 拖拽区域 */
+.droppable-row {
+  min-height: 100px;
+  border: 2px dashed transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.droppable-row.drop-over {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* 行内容布局 */
+.row-content {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  min-height: 80px;
+}
+
+.row-content.vertical-layout {
+  flex-direction: column;
+}
+
+.row-content.horizontal-layout {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* 可排序项 */
+.sortable-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sortable-item:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.sortable-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.sortable-item.horizontal-item {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* 项内容 */
+.item-content {
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 60px;
+}
+
+.item-text {
+  font-size: 16px;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* 拖拽手柄 */
+.drag-handle {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.drag-handle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* 调整大小手柄 */
+.resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: ew-resize;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.resize-handle:hover {
+  background: #3b82f6;
+}
+
+.resize-line {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 4px,
+    #3b82f6 4px,
+    #3b82f6 8px
+  );
+}
+
+/* 放置指示器 */
+.drop-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.drop-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #3b82f6;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 拖拽覆盖层 */
+.drag-overlay {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  border: 2px solid #3b82f6;
+  transform: rotate(2deg);
+  z-index: 1000;
+}
+
+.drag-overlay .item-content {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+/* 添加新行 */
+.add-row-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.add-row-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-row-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .enhanced-dnd-container {
+    padding: 12px;
+  }
+  
+  .row-content.horizontal-layout {
+    flex-direction: column;
+  }
+  
+  .sortable-item.horizontal-item {
+    width: 100% !important;
+  }
+  
+  .resize-handle {
+    display: none;
+  }
+}
+
+/* 动画效果 */
+.sortable-item {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 拖拽时的背景提示 */
+.droppable-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 25%, rgba(59, 130, 246, 0.1) 25%, rgba(59, 130, 246, 0.1) 50%, transparent 50%, transparent 75%, rgba(59, 130, 246, 0.1) 75%);
+  background-size: 20px 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.droppable-row.drop-over::before {
+  opacity: 1;
+}
+
+/* 垂直拖拽时的连接线 */
+.vertical-layout .sortable-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 2px;
+  height: 12px;
+  background: #cbd5e1;
+  transform: translateX(-50%);
+}
+
+/* 水平拖拽时的连接线 */
+.horizontal-layout .sortable-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  background: #cbd5e1;
+  transform: translateY(-50%);
+}
+
+
+/* 边缘触发区域，可通过宽度控制阈值（0-16px） */
+.edge-zone {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 10;
+  transition: background-color 0.2s ease;
+}
+
+/* 左右边缘触发区域 */
+.edge-zone.left,
+.edge-zone.right {
+  top: 0;
+  bottom: 0;
+  width: 16px; /* 精确的触发阈值，从内容边缘0-16px范围内触发 */
+}
+
+.edge-zone.left {
+  left: 0;
+}
+
+.edge-zone.right {
+  right: 0;
+}
+
+/* 上下边缘触发区域 */
+.edge-zone.top,
+.edge-zone.bottom {
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+
+.edge-zone.top {
+  top: 0;
+}
+
+.edge-zone.bottom {
+  bottom: 0;
+}
+
+.edge-zone.over {
+  background: rgba(59, 130, 246, 0.3);
+  box-shadow: inset 0 0 0 2px #3b82f6;
+}
+
+.edge-zone:hover {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+/* 确保 droppable-row 有相对定位以放置边缘触发层 */
+.droppable-row {
+  position: relative;
+}
